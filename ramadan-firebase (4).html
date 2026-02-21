@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramadan Companion 🌙</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#2d7a4f;--green-light:#e8f5ee;--green-mid:#4caf7d;
+  --gold:#c9a84c;--gold-light:#fdf6e3;
+  --bg:#f4fbf7;--text:#1a2e22;--muted:#6b8f78;
+  --border:#c8e6d4;--shadow:0 4px 20px rgba(45,122,79,0.10);
+  --red:#c0392b;--red-light:#fdeaea;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a5c35,#2d7a4f,#3d9e68);padding:1rem;}
+.login-box{background:white;border-radius:20px;padding:2rem 1.8rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.2);animation:fadeUp 0.5s ease both;}
+.login-box .logo{text-align:center;margin-bottom:1.2rem;}
+.login-box .logo h1{font-family:'Amiri',serif;font-size:1.9rem;color:var(--green);}
+.login-box .logo .bismillah{font-family:'Amiri',serif;font-size:1.1rem;color:var(--muted);direction:rtl;}
+.lang-row{display:flex;gap:0.5rem;margin-bottom:1.2rem;}
+.lang-btn{flex:1;padding:0.5rem;border-radius:10px;border:2px solid var(--border);background:white;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;}
+.lang-btn.active{background:var(--green);color:white;border-color:var(--green);}
+.tab-row{display:flex;border-radius:10px;overflow:hidden;border:2px solid var(--border);margin-bottom:1.3rem;}
+.auth-tab{flex:1;padding:0.6rem;border:none;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;color:var(--muted);transition:all 0.2s;}
+.auth-tab.active{background:var(--green);color:white;}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.35rem;}
+.form-group input{width:100%;padding:0.7rem 1rem;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.2s;color:var(--text);}
+.form-group input:focus{border-color:var(--green);}
+.auth-btn{width:100%;padding:0.85rem;background:var(--green);color:white;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s;margin-top:0.5rem;}
+.auth-btn:hover{background:#1a5c35;transform:translateY(-1px);}
+.auth-error{color:var(--red);font-size:0.82rem;text-align:center;margin-top:0.5rem;display:none;}
+.auth-success{color:var(--green);font-size:0.82rem;text-align:center;margin-top:0.5rem;display:none;}
+
+/* MAIN APP */
+#mainApp{display:none;}
+.app-header{background:linear-gradient(135deg,#1a5c35 0%,#2d7a4f 60%,#3d9e68 100%);color:white;padding:1.2rem 1rem 1.5rem;text-align:center;position:relative;overflow:hidden;}
+.app-header::before{content:'☪';position:absolute;font-size:12rem;opacity:0.05;top:-2rem;right:-2rem;pointer-events:none;}
+.app-header h1{font-family:'Amiri',serif;font-size:2rem;text-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.app-header .bismillah{font-family:'Amiri',serif;font-size:1.3rem;opacity:0.9;direction:rtl;margin-bottom:0.2rem;}
+.header-user{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.15);border-radius:50px;padding:0.35rem 0.8rem;margin:0.8rem auto 0;max-width:300px;font-size:0.82rem;}
+.logout-btn{background:rgba(255,255,255,0.25);border:none;color:white;padding:0.2rem 0.7rem;border-radius:50px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:700;}
+.logout-btn:hover{background:rgba(255,255,255,0.4);}
+.countdown-bar{background:var(--gold-light);border-bottom:2px solid var(--gold);padding:0.65rem 1rem;text-align:center;font-size:0.83rem;color:#7a5c1e;font-weight:600;}
+.countdown-bar span{font-size:1rem;color:var(--gold);}
+.nav-tabs{display:flex;background:white;border-bottom:2px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.nav-tab{flex:1;min-width:65px;padding:0.8rem 0.3rem 0.6rem;border:none;background:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em;border-bottom:3px solid transparent;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:0.15rem;}
+.nav-tab .icon{font-size:1.1rem;}
+.nav-tab:hover{color:var(--green);background:var(--green-light);}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);background:var(--green-light);}
+.section{display:none;padding:1rem;max-width:700px;margin:0 auto;}
+.section.active{display:block;}
+.section-title{font-family:'Amiri',serif;font-size:1.5rem;color:var(--green);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);}
+.card{background:white;border-radius:16px;padding:1.4rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:var(--shadow);animation:fadeUp 0.4s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.card-header{display:flex;align-items:center;gap:0.7rem;margin-bottom:1rem;padding-bottom:0.7rem;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.badge{background:var(--green);color:white;border-radius:50px;padding:0.2rem 0.7rem;font-size:0.72rem;font-weight:700;}
+.card-header h3{font-size:0.97rem;font-weight:700;color:var(--green);flex:1;}
+.copy-btn{background:var(--green-light);border:1px solid var(--border);border-radius:8px;padding:0.25rem 0.6rem;font-size:0.72rem;cursor:pointer;color:var(--green);font-family:'Nunito',sans-serif;font-weight:700;}
+.copy-btn:hover{background:var(--green);color:white;}
+.arabic{font-family:'Amiri',serif;font-size:1.5rem;line-height:2;text-align:right;direction:rtl;color:var(--text);background:var(--green-light);padding:1rem;border-radius:10px;border-right:4px solid var(--green);margin-bottom:0.8rem;}
+.transliteration{font-style:italic;color:var(--muted);font-size:0.88rem;margin-bottom:0.5rem;line-height:1.6;}
+.translation-en{font-size:0.92rem;color:var(--text);line-height:1.6;margin-bottom:0.4rem;}
+.translation-hi{background:#fff8e7;border-left:3px solid var(--gold);padding:0.7rem;border-radius:8px;margin-top:0.5rem;font-size:0.9rem;line-height:1.7;color:var(--text);}
+.hadith-source{display:inline-block;background:var(--gold-light);color:#7a5c1e;border:1px solid var(--gold);border-radius:50px;padding:0.15rem 0.7rem;font-size:0.72rem;font-weight:700;margin-top:0.5rem;}
+.day-picker{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+.day-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:white;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.8rem;color:var(--muted);transition:all 0.15s;}
+.day-btn:hover{border-color:var(--green);color:var(--green);}
+.day-btn.active{background:var(--green);color:white;border-color:var(--green);}
+.day-btn.today{border-color:var(--gold);color:var(--gold);}
+.day-btn.today.active{background:var(--gold);color:white;border-color:var(--gold);}
+.dua-cat-tabs{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+.dua-cat-btn{padding:0.4rem 0.9rem;border-radius:50px;border:2px solid var(--border);background:white;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.78rem;color:var(--muted);transition:all 0.2s;}
+.dua-cat-btn:hover{border-color:var(--green);color:var(--green);}
+.dua-cat-btn.active{background:var(--green);color:white;border-color:var(--green);}
+.tasbeeh-wrap{text-align:center;padding:1rem 0;}
+.tasbeeh-count{font-size:5rem;font-weight:700;color:var(--green);line-height:1;transition:transform 0.1s;}
+.tasbeeh-count.bump{transform:scale(1.15);}
+.tasbeeh-label{font-family:'Amiri',serif;font-size:1.4rem;color:var(--muted);margin:0.5rem 0;}
+.tasbeeh-progress{background:var(--border);border-radius:50px;height:8px;margin:1rem 0;}
+.tasbeeh-bar{background:var(--green);border-radius:50px;height:8px;transition:width 0.3s;}
+.tasbeeh-btn{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-mid));color:white;border:none;font-size:2.5rem;cursor:pointer;box-shadow:0 8px 24px rgba(45,122,79,0.35);transition:all 0.15s;margin:0.5rem 0;}
+.tasbeeh-btn:active{transform:scale(0.93);box-shadow:0 4px 12px rgba(45,122,79,0.25);}
+.tasbeeh-select{width:100%;padding:0.6rem 1rem;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.9rem;color:var(--text);outline:none;margin-bottom:1rem;background:white;}
+.tasbeeh-controls{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;}
+.ctrl-btn{padding:0.45rem 1.1rem;border:2px solid var(--border);border-radius:10px;background:white;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;color:var(--muted);transition:all 0.2s;}
+.ctrl-btn:hover{border-color:var(--green);color:var(--green);}
+.prayer-input{width:100%;padding:0.65rem 1rem;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.9rem;outline:none;color:var(--text);}
+.prayer-input:focus{border-color:var(--green);}
+.search-btn{padding:0.65rem 1.2rem;background:var(--green);color:white;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;}
+.prayer-search-wrap{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.popular-cities{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.city-chip{padding:0.3rem 0.7rem;background:var(--green-light);border:1px solid var(--border);border-radius:50px;font-size:0.78rem;cursor:pointer;color:var(--green);font-weight:600;}
+.city-chip:hover{background:var(--green);color:white;}
+.prayer-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem;}
+.prayer-item{background:var(--green-light);border-radius:10px;padding:0.6rem;text-align:center;}
+.prayer-name{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;}
+.prayer-time{font-size:1.1rem;font-weight:700;color:var(--green);}
+.profile-card{background:linear-gradient(135deg,var(--green),#3d9e68);border-radius:16px;padding:1.5rem;text-align:center;color:white;margin-bottom:1rem;}
+.profile-avatar{font-size:3rem;margin-bottom:0.5rem;}
+.profile-name{font-size:1.3rem;font-weight:700;}
+.profile-email{font-size:0.82rem;opacity:0.8;margin-top:0.2rem;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.7rem;margin-bottom:1rem;}
+.stat-box{background:white;border-radius:12px;padding:0.9rem 0.5rem;text-align:center;border:1px solid var(--border);}
+.stat-num{font-size:1.6rem;font-weight:700;color:var(--green);}
+.stat-label{font-size:0.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;margin-top:0.2rem;}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(2rem);background:#1a2e22;color:white;padding:0.7rem 1.4rem;border-radius:50px;font-size:0.85rem;font-weight:600;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error-toast{background:var(--red);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">
+      <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <h1>🌙 Ramadan Companion</h1>
+    </div>
+
+    <!-- LANGUAGE SELECTOR -->
+    <div style="margin-bottom:1rem;">
+      <p style="font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;text-align:center;">🌐 Language / भाषा</p>
+      <div class="lang-row">
+        <button class="lang-btn active" id="langBtnEN" onclick="setLang('en')">🇮🇳 English</button>
+        <button class="lang-btn" id="langBtnHI" onclick="setLang('hi')">🇮🇳 हिंदी</button>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="auth-tab active" id="loginTabBtn" onclick="switchAuthTab('login')">Login</button>
+      <button class="auth-tab" id="signupTabBtn" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label id="lblEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@email.com" />
+      </div>
+      <div class="form-group">
+        <label id="lblPass">Password</label>
+        <div style="position:relative;">
+          <input type="password" id="loginPassword" placeholder="Your password" style="padding-right:2.8rem;" />
+          <span onclick="togglePass('loginPassword','eye1')" id="eye1" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1.1rem;user-select:none;">👁️</span>
+        </div>
+      </div>
+      <div class="auth-error" id="loginError"></div>
+      <div id="forgotSuccess" style="display:none;color:var(--green);font-size:0.82rem;text-align:center;margin-top:0.4rem;"></div>
+      <button class="auth-btn" onclick="doLogin()" id="btnLogin">Login →</button>
+      <p style="text-align:center;margin-top:0.8rem;">
+        <span onclick="doForgotPassword()" style="font-size:0.78rem;color:var(--green);cursor:pointer;font-weight:700;text-decoration:underline;" id="forgotLink">🔑 Forgot Password?</span>
+      </p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:0.5rem;" id="switchToSignup">
+        Don't have an account? <span style="color:var(--green);cursor:pointer;font-weight:700;" onclick="switchAuthTab('signup')" id="goSignupLink">Sign Up</span>
+      </p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" style="display:none;">
+      <div class="form-group">
+        <label id="lblName">Full Name</label>
+        <input type="text" id="signupName" placeholder="Your name" />
+      </div>
+      <div class="form-group">
+        <label id="lblEmail2">Email</label>
+        <input type="email" id="signupEmail" placeholder="you@email.com" />
+      </div>
+      <div class="form-group">
+        <label id="lblPass2">Password (min 6 chars)</label>
+        <div style="position:relative;">
+          <input type="password" id="signupPassword" placeholder="Choose a password" style="padding-right:2.8rem;" />
+          <span onclick="togglePass('signupPassword','eye2')" id="eye2" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1.1rem;user-select:none;">👁️</span>
+        </div>
+      </div>
+      <div class="auth-error" id="signupError"></div>
+      <div class="auth-success" id="signupSuccess"></div>
+      <button class="auth-btn" onclick="doSignup()" id="btnSignup">Create Account →</button>
+      <p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:1rem;" id="switchToLogin">
+        Already have an account? <span style="color:var(--green);cursor:pointer;font-weight:700;" onclick="switchAuthTab('login')" id="goLoginLink">Login</span>
+      </p>
+    </div>
+
+    <p style="text-align:center;margin-top:1rem;">
+      <span style="font-size:0.78rem;color:var(--muted);cursor:pointer;text-decoration:underline;" onclick="continueAsGuest()" id="guestLink">Continue as Guest (no save)</span>
+    </p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+  <div class="app-header">
+    <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    <h1>🌙 Ramadan Companion</h1>
+    <div class="header-user">
+      <span id="headerUserName">👤 Guest</span>
+      <button class="logout-btn" onclick="doLogout()" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <div class="countdown-bar" id="countdownBar">🌙 Loading...</div>
+
+  <!-- TODAY'S ROZA CARD -->
+  <div id="rozaHomeCard" style="background:linear-gradient(135deg,#1a5c35,#2d7a4f);color:white;padding:1rem;text-align:center;display:none;">
+    <div style="font-size:0.72rem;opacity:0.8;text-transform:uppercase;letter-spacing:0.1em;" id="rozaCardLabel">AAJ KA ROZA — RAJNANDGAON</div>
+    <div style="font-size:2.5rem;font-weight:700;line-height:1.1;" id="rozaNumber">—</div>
+    <div style="font-size:0.9rem;opacity:0.9;" id="rozaDate">—</div>
+    <div style="display:flex;justify-content:center;gap:2rem;margin-top:0.7rem;">
+      <div style="text-align:center;">
+        <div style="font-size:0.7rem;opacity:0.75;" id="sehriLabel">🌙 SEHRI BAND</div>
+        <div style="font-size:1.3rem;font-weight:700;" id="homeSehri">—</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:0.7rem;opacity:0.75;" id="iftarLabel">🌅 IFTAR</div>
+        <div style="font-size:1.3rem;font-weight:700;" id="homeIftar">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" onclick="showSection('hadith',this)"><span class="icon">📖</span><span id="navHadith">Hadith</span></button>
+    <button class="nav-tab" onclick="showSection('duas',this)"><span class="icon">🤲</span><span id="navDuas">Duas</span></button>
+    <button class="nav-tab" onclick="showSection('tasbeeh',this)"><span class="icon">📿</span><span id="navTasbeeh">Tasbeeh</span></button>
+    <button class="nav-tab" onclick="showSection('prayer',this)"><span class="icon">🕌</span><span id="navPrayer">Prayer</span></button>
+    <button class="nav-tab" onclick="showSection('timetable',this)"><span class="icon">📅</span><span id="navTimetable">Timetable</span></button>
+    <button class="nav-tab" onclick="showSection('profile',this)"><span class="icon">👤</span><span id="navProfile">Profile</span></button>
+  </div>
+
+  <!-- HADITH -->
+  <div class="section active" id="section-hadith">
+    <div class="section-title" id="hadithTitle">📖 30 Days — Authentic Hadith</div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;" id="hadithSubtitle">Tap a day number to read its hadith.</p>
+    <div class="day-picker" id="dayPicker"></div>
+    <div id="hadithCard"></div>
+  </div>
+
+  <!-- DUAS -->
+  <div class="section" id="section-duas">
+    <div class="section-title" id="duasTitle">🤲 Important Duas</div>
+    <div class="dua-cat-tabs" id="duaCatTabs"></div>
+    <div id="duasList"></div>
+  </div>
+
+  <!-- TASBEEH -->
+  <div class="section" id="section-tasbeeh">
+    <div class="section-title" id="tasbeehTitle">📿 Tasbeeh Counter</div>
+    <div class="card">
+      <select class="tasbeeh-select" id="tasbeehSelect" onchange="changeTasbeeh()">
+        <option value="0">SubhanAllah (سُبْحَانَ اللَّهِ)</option>
+        <option value="1">Alhamdulillah (الْحَمْدُ لِلَّهِ)</option>
+        <option value="2">Allahu Akbar (اللَّهُ أَكْبَرُ)</option>
+        <option value="3">La ilaha illallah (لَا إِلَٰهَ إِلَّا اللَّهُ)</option>
+        <option value="4">Astaghfirullah (أَسْتَغْفِرُ اللَّهَ)</option>
+        <option value="5">Durood Ibrahim (صلوات)</option>
+      </select>
+      <div class="tasbeeh-wrap">
+        <div class="tasbeeh-count" id="tasbeehCount">0</div>
+        <div class="tasbeeh-label" id="tasbeehLabel">سُبْحَانَ اللَّهِ</div>
+        <div class="tasbeeh-progress"><div class="tasbeeh-bar" id="tasbeehBar" style="width:0%"></div></div>
+        <button class="tasbeeh-btn" onclick="incrementTasbeeh()">☪</button><br>
+        <div style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">
+          <span id="targetLabel">Target:</span> <strong id="tasbeehTarget">33</strong> • <span id="roundLabel">Round</span> <strong id="tasbeehRound">1</strong>
+        </div>
+        <div class="tasbeeh-controls">
+          <button class="ctrl-btn" onclick="undoTasbeeh()" id="undoBtn">↩ Undo</button>
+          <button class="ctrl-btn" onclick="resetTasbeeh()" id="resetBtn">🔄 Reset</button>
+          <button class="ctrl-btn" onclick="setTarget()" id="targetBtn">🎯 Target</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRAYER TIMES -->
+  <div class="section" id="section-prayer">
+    <div class="section-title" id="prayerTitle">🕌 Prayer Times</div>
+    <div class="card">
+      <div class="card-header"><h3 id="prayerSearchTitle">Find Prayer Times for Your City</h3></div>
+      <div class="prayer-search-wrap">
+        <input class="prayer-input" type="text" id="cityInput" placeholder="Type city name e.g. Lucknow" onkeydown="if(event.key==='Enter')fetchPrayer()" />
+        <button class="search-btn" onclick="fetchPrayer()" id="searchBtn">🔍</button>
+      </div>
+      <div style="margin-top:0.2rem;">
+        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.4rem;font-weight:600;" id="tapCityLabel">TAP YOUR CITY:</p>
+        <div class="popular-cities">
+          <span class="city-chip" onclick="quickCity('Mumbai,IN')">Mumbai 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Delhi,IN')">Delhi 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Hyderabad,IN')">Hyderabad 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Chennai,IN')">Chennai 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Bangalore,IN')">Bangalore 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Kolkata,IN')">Kolkata 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Lucknow,IN')">Lucknow 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Jaipur,IN')">Jaipur 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Patna,IN')">Patna 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Bhopal,IN')">Bhopal 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Ahmedabad,IN')">Ahmedabad 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Pune,IN')">Pune 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Srinagar,IN')">Srinagar 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Raipur,IN')">Raipur 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Bhilai,IN')">Bhilai 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Rajnandgaon,IN')">Rajnandgaon 🇮🇳</span>
+          <span class="city-chip" onclick="quickCity('Dubai,AE')">Dubai 🇦🇪</span>
+          <span class="city-chip" onclick="quickCity('Riyadh,SA')">Riyadh 🇸🇦</span>
+        </div>
+      </div>
+    </div>
+    <div id="prayerResult"></div>
+    <div class="card">
+      <div class="card-header"><h3 id="specialPrayersTitle">Ramadan Special Prayers</h3></div>
+      <div style="font-size:0.88rem;line-height:1.9;color:var(--text);" id="specialPrayersContent">
+        <p><strong style="color:var(--green);">Suhoor (سحور):</strong> Pre-dawn meal before Fajr. Sunnah with great blessing.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--green);">Iftar (إفطار):</strong> Break fast at Maghrib. Sunnah: break with dates then water.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--green);">Tarawih (تراويح):</strong> Night prayer after Isha — 8 or 20 rakats.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--green);">Tahajjud (تهجد):</strong> Last third of night — most powerful in Ramadan.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMETABLE -->
+  <div class="section" id="section-timetable">
+    <div class="section-title">📅 Rajnandgaon — Ramadan 2026</div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;" id="timetableSubtitle">Full Ramadan Sehri &amp; Iftar timetable. Today's roza highlighted in gold ✨</p>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+        <thead>
+          <tr style="background:var(--green);color:white;">
+            <th style="padding:0.7rem 0.5rem;text-align:center;" id="thRoza">Roza</th>
+            <th style="padding:0.7rem 0.5rem;text-align:center;" id="thDate">Date</th>
+            <th style="padding:0.7rem 0.5rem;text-align:center;">🌙 <span id="thSehri">Sehri</span></th>
+            <th style="padding:0.7rem 0.5rem;text-align:center;">🌅 <span id="thIftar">Iftar</span></th>
+          </tr>
+        </thead>
+        <tbody id="timetableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section" id="section-profile">
+    <div class="section-title" id="profileTitle">👤 My Profile</div>
+    <div class="profile-card">
+      <div class="profile-avatar">🌙</div>
+      <div class="profile-name" id="profileName">Guest</div>
+      <div class="profile-email" id="profileEmail">guest@ramadan.app</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num" id="statTasbeeh">0</div><div class="stat-label" id="statLabelTasbeeh">Total Tasbeeh</div></div>
+      <div class="stat-box"><div class="stat-num" id="statHadith">0</div><div class="stat-label" id="statLabelHadith">Hadith Read</div></div>
+      <div class="stat-box"><div class="stat-num" id="statDays">0</div><div class="stat-label" id="statLabelDays">Days Active</div></div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-header"><h3 id="accountSettingsTitle">Account Settings</h3></div>
+      <div class="form-group" style="margin-bottom:0.8rem;">
+        <label style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;" id="displayNameLabel">Display Name</label>
+        <input type="text" id="editName" style="width:100%;padding:0.6rem 0.9rem;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.9rem;outline:none;margin-top:0.3rem;" />
+      </div>
+      <button class="search-btn" style="width:100%;" onclick="saveName()" id="saveNameBtn">Save Changes</button>
+    </div>
+    <div class="card">
+      <button onclick="doLogout()" style="width:100%;padding:0.8rem;background:var(--red-light);color:var(--red);border:2px solid #f5c6c6;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;" id="logoutBtn2">🚪 Logout</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+// ══════════════════════════════
+// FIREBASE — MUST BE FIRST
+// ══════════════════════════════
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCWyfvU5bMkDfkj4j8oyN8Mejkq0xJwCA4",
+  authDomain: "bismillah-bc28b.firebaseapp.com",
+  projectId: "bismillah-bc28b",
+  storageBucket: "bismillah-bc28b.firebasestorage.app",
+  messagingSenderId: "846546111686",
+  appId: "1:846546111686:web:8d5698fa108e876ccb5bc7"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+
+// ══════════════════════════════
+// LANGUAGE SYSTEM
+// ══════════════════════════════
+let currentLang = localStorage.getItem('rc_lang') || 'en';
+
+const UI = {
+  en: {
+    loginSubtitle:'Sign in to save your progress',
+    loginTab:'Login', signupTab:'Sign Up',
+    lblEmail:'Email', lblPass:'Password', lblName:'Full Name', lblPass2:'Password (min 6 chars)',
+    btnLogin:'Login →', btnSignup:'Create Account →',
+    forgotLink:'🔑 Forgot Password?',
+    switchToSignup:"Don't have an account?", goSignup:'Sign Up',
+    switchToLogin:'Already have an account?', goLogin:'Login',
+    guestLink:'Continue as Guest (no save)',
+    logoutBtn:'Logout',
+    navHadith:'Hadith', navDuas:'Duas', navTasbeeh:'Tasbeeh',
+    navPrayer:'Prayer', navTimetable:'Timetable', navProfile:'Profile',
+    hadithTitle:'📖 30 Days — Authentic Hadith',
+    hadithSubtitle:'Tap a day number to read its hadith.',
+    duasTitle:'🤲 Important Duas',
+    tasbeehTitle:'📿 Tasbeeh Counter',
+    targetLabel:'Target:', roundLabel:'Round',
+    undoBtn:'↩ Undo', resetBtn:'🔄 Reset', targetBtn:'🎯 Target',
+    prayerTitle:'🕌 Prayer Times',
+    prayerSearchTitle:'Find Prayer Times for Your City',
+    tapCityLabel:'TAP YOUR CITY:',
+    specialPrayersTitle:'Ramadan Special Prayers',
+    timetableSubtitle:'Full Ramadan Sehri & Iftar timetable. Today\'s roza highlighted in gold ✨',
+    thRoza:'Roza', thDate:'Date', thSehri:'Sehri', thIftar:'Iftar',
+    todayBadge:'✨ Today',
+    profileTitle:'👤 My Profile',
+    statLabelTasbeeh:'Total Tasbeeh', statLabelHadith:'Hadith Read', statLabelDays:'Days Active',
+    accountSettingsTitle:'Account Settings', displayNameLabel:'Display Name',
+    saveNameBtn:'Save Changes', logoutBtn2:'🚪 Logout',
+    rozaCardLabel:'TODAY\'S ROZA — RAJNANDGAON',
+    sehriLabel:'🌙 SEHRI', iftarLabel:'🌅 IFTAR',
+    copyBtn:'📋 Copy',
+    days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    ramadanDay:'Ramadan Day', of:'of', mayAllah:'May Allah accept your fasts! آمین',
+    daysUntil:'days until Ramadan 2026 — Prepare your heart!',
+    ramadanEnded:'Ramadan 2026 ended — May Allah accept all ibadah! آمین',
+    roza:'Roza', roundComplete:'Round complete! MashAllah!',
+    savedName:'Name saved!', loggedOut:'Logged out!',
+    copied:'Copied!', prayerFor:'Prayer Times for',
+    specialPrayersContent:`<p><strong style="color:var(--green);">Suhoor (سحور):</strong> Pre-dawn meal before Fajr. Great blessing in Suhoor.</p>
+      <p style="margin-top:0.5rem;"><strong style="color:var(--green);">Iftar (إفطار):</strong> Break fast at Maghrib. Sunnah: break with dates then water.</p>
+      <p style="margin-top:0.5rem;"><strong style="color:var(--green);">Tarawih (تراويح):</strong> Night prayer after Isha — 8 or 20 rakats.</p>
+      <p style="margin-top:0.5rem;"><strong style="color:var(--green);">Tahajjud (تهجد):</strong> Last third of night — most powerful in Ramadan.</p>`
+  },
+  hi: {
+    loginSubtitle:'अपनी प्रगति सहेजने के लिए साइन इन करें',
+    loginTab:'लॉगिन', signupTab:'साइन अप',
+    lblEmail:'ईमेल', lblPass:'पासवर्ड', lblName:'पूरा नाम', lblPass2:'पासवर्ड (कम से कम 6 अक्षर)',
+    btnLogin:'लॉगिन करें →', btnSignup:'खाता बनाएं →',
+    forgotLink:'🔑 पासवर्ड भूल गए?',
+    switchToSignup:'खाता नहीं है?', goSignup:'साइन अप करें',
+    switchToLogin:'पहले से खाता है?', goLogin:'लॉगिन करें',
+    guestLink:'बिना खाते के जारी रखें (सेव नहीं होगा)',
+    logoutBtn:'लॉगआउट',
+    navHadith:'हदीस', navDuas:'दुआएं', navTasbeeh:'तस्बीह',
+    navPrayer:'नमाज़', navTimetable:'समय सारणी', navProfile:'प्रोफाइल',
+    hadithTitle:'📖 ३० दिन — प्रामाणिक हदीस',
+    hadithSubtitle:'हदीस पढ़ने के लिए दिन का नंबर दबाएं।',
+    duasTitle:'🤲 महत्वपूर्ण दुआएं',
+    tasbeehTitle:'📿 तस्बीह काउंटर',
+    targetLabel:'लक्ष्य:', roundLabel:'राउंड',
+    undoBtn:'↩ पूर्ववत', resetBtn:'🔄 रीसेट', targetBtn:'🎯 लक्ष्य',
+    prayerTitle:'🕌 नमाज़ का समय',
+    prayerSearchTitle:'अपने शहर का नमाज़ समय जानें',
+    tapCityLabel:'अपना शहर चुनें:',
+    specialPrayersTitle:'रमज़ान की विशेष नमाज़ें',
+    timetableSubtitle:'पूरे रमज़ान की सेहरी और इफ्तार का समय। आज का रोज़ा सुनहरे रंग में ✨',
+    thRoza:'रोज़ा', thDate:'तारीख', thSehri:'सेहरी', thIftar:'इफ्तार',
+    todayBadge:'✨ आज',
+    profileTitle:'👤 मेरी प्रोफाइल',
+    statLabelTasbeeh:'कुल तस्बीह', statLabelHadith:'हदीस पढ़ी', statLabelDays:'सक्रिय दिन',
+    accountSettingsTitle:'खाता सेटिंग', displayNameLabel:'नाम',
+    saveNameBtn:'बदलाव सहेजें', logoutBtn2:'🚪 लॉगआउट',
+    rozaCardLabel:'आज का रोज़ा — राजनांदगांव',
+    sehriLabel:'🌙 सेहरी', iftarLabel:'🌅 इफ्तार',
+    copyBtn:'📋 कॉपी',
+    days:['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'],
+    ramadanDay:'रमज़ान का दिन', of:'में से', mayAllah:'अल्लाह आपके रोज़े कबूल करे! آمین',
+    daysUntil:'दिन बाकी हैं रमज़ान 2026 में — दिल तैयार करें!',
+    ramadanEnded:'रमज़ान 2026 समाप्त — अल्लाह सभी इबादत कबूल करे! آمین',
+    roza:'रोज़ा', roundComplete:'राउंड पूरा! माशाअल्लाह!',
+    savedName:'नाम सहेजा गया!', loggedOut:'लॉगआउट हो गए!',
+    copied:'कॉपी हो गया!', prayerFor:'नमाज़ का समय —',
+    specialPrayersContent:`<p><strong style="color:var(--green);">सहरी (سحور):</strong> फज्र से पहले का भोजन। सहरी में बड़ी बरकत है।</p>
+      <p style="margin-top:0.5rem;"><strong style="color:var(--green);">इफ्तार (إفطار):</strong> मगरिब पर रोज़ा खोलें। सुन्नत है — पहले खजूर फिर पानी।</p>
+      <p style="margin-top:0.5rem;"><strong style="color:var(--green);">तरावीह (تراويح):</strong> इशा के बाद रात की नमाज़ — 8 या 20 रकत।</p>
+      <p style="margin-top:0.5rem;"><strong style="color:var(--green);">तहज्जुद (تهجد):</strong> रात के आखिरी तिहाई में — रमज़ान में सबसे ताकतवर।</p>`
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('rc_lang', lang);
+  const T = UI[lang];
+  // Lang buttons
+  document.getElementById('langBtnEN').classList.toggle('active', lang==='en');
+  document.getElementById('langBtnHI').classList.toggle('active', lang==='hi');
+  // Login screen
+  const sub = document.getElementById('loginSubtitle'); if(sub) sub.textContent = T.loginSubtitle;
+  document.getElementById('loginTabBtn').textContent = T.loginTab;
+  document.getElementById('signupTabBtn').textContent = T.signupTab;
+  document.getElementById('lblEmail').textContent = T.lblEmail;
+  document.getElementById('lblPass').textContent = T.lblPass;
+  document.getElementById('lblName').textContent = T.lblName;
+  document.getElementById('lblEmail2').textContent = T.lblEmail2 || T.lblEmail;
+  document.getElementById('lblPass2').textContent = T.lblPass2;
+  document.getElementById('btnLogin').textContent = T.btnLogin;
+  document.getElementById('btnSignup').textContent = T.btnSignup;
+  document.getElementById('forgotLink').textContent = T.forgotLink;
+  document.getElementById('switchToSignup').innerHTML = T.switchToSignup+' <span style="color:var(--green);cursor:pointer;font-weight:700;" onclick="switchAuthTab(\'signup\')">' + T.goSignup + '</span>';
+  document.getElementById('switchToLogin').innerHTML = T.switchToLogin+' <span style="color:var(--green);cursor:pointer;font-weight:700;" onclick="switchAuthTab(\'login\')">' + T.goLogin + '</span>';
+  document.getElementById('guestLink').textContent = T.guestLink;
+  // Main app
+  const logoutBtn = document.getElementById('logoutBtn'); if(logoutBtn) logoutBtn.textContent = T.logoutBtn;
+  const navH = document.getElementById('navHadith'); if(navH) navH.textContent = T.navHadith;
+  const navD = document.getElementById('navDuas'); if(navD) navD.textContent = T.navDuas;
+  const navT = document.getElementById('navTasbeeh'); if(navT) navT.textContent = T.navTasbeeh;
+  const navP = document.getElementById('navPrayer'); if(navP) navP.textContent = T.navPrayer;
+  const navTT = document.getElementById('navTimetable'); if(navTT) navTT.textContent = T.navTimetable;
+  const navPr = document.getElementById('navProfile'); if(navPr) navPr.textContent = T.navProfile;
+  const hT = document.getElementById('hadithTitle'); if(hT) hT.textContent = T.hadithTitle;
+  const hS = document.getElementById('hadithSubtitle'); if(hS) hS.textContent = T.hadithSubtitle;
+  const dT = document.getElementById('duasTitle'); if(dT) dT.textContent = T.duasTitle;
+  const ttT = document.getElementById('tasbeehTitle'); if(ttT) ttT.textContent = T.tasbeehTitle;
+  const tgL = document.getElementById('targetLabel'); if(tgL) tgL.textContent = T.targetLabel;
+  const rlL = document.getElementById('roundLabel'); if(rlL) rlL.textContent = T.roundLabel;
+  const uB = document.getElementById('undoBtn'); if(uB) uB.textContent = T.undoBtn;
+  const rB = document.getElementById('resetBtn'); if(rB) rB.textContent = T.resetBtn;
+  const tB = document.getElementById('targetBtn'); if(tB) tB.textContent = T.targetBtn;
+  const pT = document.getElementById('prayerTitle'); if(pT) pT.textContent = T.prayerTitle;
+  const pST = document.getElementById('prayerSearchTitle'); if(pST) pST.textContent = T.prayerSearchTitle;
+  const tcL = document.getElementById('tapCityLabel'); if(tcL) tcL.textContent = T.tapCityLabel;
+  const spT = document.getElementById('specialPrayersTitle'); if(spT) spT.textContent = T.specialPrayersTitle;
+  const spC = document.getElementById('specialPrayersContent'); if(spC) spC.innerHTML = T.specialPrayersContent;
+  const tmS = document.getElementById('timetableSubtitle'); if(tmS) tmS.textContent = T.timetableSubtitle;
+  const thR = document.getElementById('thRoza'); if(thR) thR.textContent = T.thRoza;
+  const thDt = document.getElementById('thDate'); if(thDt) thDt.textContent = T.thDate;
+  const thSh = document.getElementById('thSehri'); if(thSh) thSh.textContent = T.thSehri;
+  const thIf = document.getElementById('thIftar'); if(thIf) thIf.textContent = T.thIftar;
+  const prT = document.getElementById('profileTitle'); if(prT) prT.textContent = T.profileTitle;
+  const sLT = document.getElementById('statLabelTasbeeh'); if(sLT) sLT.textContent = T.statLabelTasbeeh;
+  const sLH = document.getElementById('statLabelHadith'); if(sLH) sLH.textContent = T.statLabelHadith;
+  const sLD = document.getElementById('statLabelDays'); if(sLD) sLD.textContent = T.statLabelDays;
+  const acT = document.getElementById('accountSettingsTitle'); if(acT) acT.textContent = T.accountSettingsTitle;
+  const dnL = document.getElementById('displayNameLabel'); if(dnL) dnL.textContent = T.displayNameLabel;
+  const snB = document.getElementById('saveNameBtn'); if(snB) snB.textContent = T.saveNameBtn;
+  const lb2 = document.getElementById('logoutBtn2'); if(lb2) lb2.textContent = T.logoutBtn2;
+  const rcL = document.getElementById('rozaCardLabel'); if(rcL) rcL.textContent = T.rozaCardLabel;
+  const shL = document.getElementById('sehriLabel'); if(shL) shL.textContent = T.sehriLabel;
+  const ifL = document.getElementById('iftarLabel'); if(ifL) ifL.textContent = T.iftarLabel;
+  // Rebuild dynamic content
+  buildTimetable();
+  updateCountdown();
+  updateHomeRozaCard();
+  const activeDay = document.querySelector('.day-btn.active');
+  if(activeDay) loadHadith(parseInt(activeDay.textContent));
+  const activeCat = document.querySelector('.dua-cat-btn.active');
+  if(activeCat) loadDuas(activeCat.dataset.cat || 'Ramadan');
+}
+
+// ══════════════════════════════
+// HADITH DATA — Authentic, with Hindi translation
+// ══════════════════════════════
+const hadithData = [
+  {day:1,arabic:"إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ",translit:"Innamal a'maalu bin niyyaat",en:"Actions are judged by intentions. Every person gets what they intend.",hi:"अमल का दारोमदार नीयत पर है। हर इंसान को वही मिलता है जिसकी उसने नीयत की।",source:"Bukhari & Muslim",topic:"Intentions"},
+  {day:2,arabic:"مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",translit:"Man saama Ramadhaana eemaanan wahtisaaban ghufira lahu maa taqaddama min dhambih",en:"Whoever fasts Ramadan with faith and seeking reward, his past sins will be forgiven.",hi:"जो ईमान और सवाब की नीयत से रमज़ान के रोज़े रखे, उसके पिछले सभी गुनाह माफ़ कर दिए जाते हैं।",source:"Bukhari & Muslim",topic:"Fasting"},
+  {day:3,arabic:"الصَّوْمُ جُنَّةٌ",translit:"As-sawmu junnah",en:"Fasting is a shield from sin and Hellfire. The fasting person should not speak obscenely.",hi:"रोज़ा एक ढाल है। इसलिए रोज़ेदार को बेहूदा बात नहीं करनी चाहिए और न जहालत से पेश आना चाहिए।",source:"Bukhari",topic:"Fasting"},
+  {day:4,arabic:"مَنْ لَمْ يَدَعْ قَوْلَ الزُّورِ وَالْعَمَلَ بِهِ فَلَيْسَ لِلَّهِ حَاجَةٌ فِي أَنْ يَدَعَ طَعَامَهُ وَشَرَابَهُ",translit:"Man lam yada' qawlaz-zoori wal-'amala bihi falaysa lillahi haajatun fi an yada'a ta'aamahu wa sharaabah",en:"Whoever does not give up false speech, Allah has no need of him giving up food and drink.",hi:"जो झूठी बातें और उस पर अमल न छोड़े, तो अल्लाह को उसका खाना-पीना छोड़ने की कोई ज़रूरत नहीं।",source:"Bukhari",topic:"Character"},
+  {day:5,arabic:"لِلصَّائِمِ فَرْحَتَانِ: إِذَا أَفْطَرَ فَرِحَ، وَإِذَا لَقِيَ رَبَّهُ فَرِحَ بِصَوْمِهِ",translit:"Lissaa'imi farhataan: idha aftara fariha wa idha laqiya Rabbahu fariha bisawmih",en:"The fasting person has two joys: joy when he breaks his fast, and joy when he meets his Lord.",hi:"रोज़ेदार के लिए दो खुशियां हैं — एक इफ्तार के वक्त और दूसरी अपने रब से मुलाक़ात के वक्त।",source:"Bukhari & Muslim",topic:"Fasting"},
+  {day:6,arabic:"مَنْ فَطَّرَ صَائِمًا كَانَ لَهُ مِثْلُ أَجْرِهِ",translit:"Man fattara saa'iman kaana lahu mithlu ajrih",en:"Whoever feeds a fasting person will have a reward equal to his, without any reduction.",hi:"जो किसी रोज़ेदार को इफ्तार कराए, उसे रोज़ेदार के बराबर सवाब मिलेगा और उसके सवाब में कोई कमी नहीं आएगी।",source:"Tirmidhi",topic:"Generosity"},
+  {day:7,arabic:"إِذَا جَاءَ رَمَضَانُ فُتِّحَتْ أَبْوَابُ الْجَنَّةِ وَغُلِّقَتْ أَبْوَابُ النَّارِ وَصُفِّدَتِ الشَّيَاطِينُ",translit:"Idha jaa'a Ramadhaanu futtihat abwaabul jannati wa ghulliqat abwaabin naari wa suffidatish-shayaateen",en:"When Ramadan comes, the gates of Paradise are opened, Hellfire gates are closed, and devils are chained.",hi:"जब रमज़ान आता है, जन्नत के दरवाज़े खोल दिए जाते हैं, जहन्नम के दरवाज़े बंद कर दिए जाते हैं और शैतान जकड़ दिए जाते हैं।",source:"Bukhari & Muslim",topic:"Ramadan"},
+  {day:8,arabic:"عَلَيْكُمْ بِالصِّدْقِ فَإِنَّ الصِّدْقَ يَهْدِي إِلَى الْبِرِّ وَالْبِرُّ يَهْدِي إِلَى الْجَنَّةِ",translit:"'Alaykum bis-sidqi fa-innas-sidqa yahdee ilal-birri wal-birru yahdee ilal-jannah",en:"Be truthful, for truthfulness leads to righteousness and righteousness leads to Paradise.",hi:"सच्चाई को लाज़िम करो, क्योंकि सच नेकी की तरफ ले जाता है और नेकी जन्नत की तरफ।",source:"Bukhari & Muslim",topic:"Truthfulness"},
+  {day:9,arabic:"أَفْضَلُ الصَّدَقَةِ أَنْ تَصَدَّقَ وَأَنْتَ صَحِيحٌ شَحِيحٌ",translit:"Afdalus-sadaqati an tasaddaqa wa anta saheehun shaheeh",en:"The best charity is to give while you are healthy and wish to keep your wealth.",hi:"सबसे बेहतरीन सदका वह है जो तुम तंदुरुस्त हालत में करो जब माल की ख़्वाहिश हो।",source:"Bukhari",topic:"Charity"},
+  {day:10,arabic:"اتَّقُوا النَّارَ وَلَوْ بِشِقِّ تَمْرَةٍ",translit:"Ittaqun-naara wa law bishiqqi tamrah",en:"Save yourself from Hellfire even by giving half a date in charity.",hi:"जहन्नम से बचो, चाहे खजूर के एक टुकड़े के ज़रिए सदका करके।",source:"Bukhari & Muslim",topic:"Charity"},
+  {day:11,arabic:"لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",translit:"La yu'minu ahadukum hatta yuhibba li akheehi ma yuhibbu linafsih",en:"None of you truly believes until he loves for his brother what he loves for himself.",hi:"तुममें से कोई उस वक्त तक मोमिन नहीं जब तक अपने भाई के लिए वही न चाहे जो खुद के लिए चाहता है।",source:"Bukhari & Muslim",topic:"Brotherhood"},
+  {day:12,arabic:"مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",translit:"Man kaana yu'minu billahi wal-yawmil-aakhiri falyaqul khayran aw liyasmut",en:"Whoever believes in Allah and the Last Day should speak good or remain silent.",hi:"जो अल्लाह और आखिरत के दिन पर ईमान रखता हो, वो अच्छी बात कहे या खामोश रहे।",source:"Bukhari & Muslim",topic:"Speech"},
+  {day:13,arabic:"الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",translit:"Al-muslimu man salimal-muslimoona min lisaanihi wa yadih",en:"A Muslim is one from whose tongue and hand other Muslims are safe.",hi:"मुसलमान वह है जिसकी ज़बान और हाथ से दूसरे मुसलमान महफूज़ रहें।",source:"Bukhari",topic:"Character"},
+  {day:14,arabic:"خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",translit:"Khayrukum man ta'allamal-Qur'aana wa 'allamah",en:"The best of you are those who learn the Quran and teach it.",hi:"तुममें से बेहतरीन वह है जो क़ुरआन सीखे और सिखाए।",source:"Bukhari",topic:"Quran"},
+  {day:15,arabic:"تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",translit:"Tabassmuka fee wajhi akheeka laka sadaqah",en:"Your smile in the face of your brother is charity.",hi:"अपने भाई के चेहरे पर मुस्कुराना तुम्हारे लिए सदका है।",source:"Tirmidhi",topic:"Kindness"},
+  {day:16,arabic:"إِنَّ اللَّهَ رَفِيقٌ يُحِبُّ الرِّفْقَ",translit:"Innallaaha rafeequn yuhibbur-rifqah",en:"Allah is gentle and loves gentleness. He gives for gentleness what He does not give for harshness.",hi:"अल्लाह नरम है और नरमी को पसंद करता है। नरमी पर वो देता है जो सख्ती पर नहीं देता।",source:"Bukhari & Muslim",topic:"Gentleness"},
+  {day:17,arabic:"أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",translit:"Ahabbal-a'maali ilallahi adwamuhaa wa in qall",en:"The most beloved deeds to Allah are those done consistently, even if they are small.",hi:"अल्लाह को सबसे ज़्यादा पसंदीदा अमल वो है जो हमेशा किया जाए, चाहे थोड़ा हो।",source:"Bukhari & Muslim",topic:"Consistency"},
+  {day:18,arabic:"الدُّعَاءُ هُوَ الْعِبَادَةُ",translit:"Ad-du'aa'u huwal-'ibaadah",en:"Dua (supplication) is the essence of worship itself.",hi:"दुआ ही इबादत का असल मग़ज़ है।",source:"Tirmidhi & Abu Dawud",topic:"Dua"},
+  {day:19,arabic:"مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ طَرِيقًا إِلَى الْجَنَّةِ",translit:"Man salaka tareeqan yaltamisu feehi 'ilman sahhallahu lahu tareeqan ilal-jannah",en:"Whoever takes a path seeking knowledge, Allah will make easy for him a path to Paradise.",hi:"जो शख्स इल्म हासिल करने का रास्ता अपनाए, अल्लाह उसके लिए जन्नत का रास्ता आसान कर देता है।",source:"Muslim",topic:"Knowledge"},
+  {day:20,arabic:"إِنَّ مِنْ أَحَبِّكُمْ إِلَيَّ أَحَاسِنَكُمْ أَخْلَاقًا",translit:"Inna min ahabbikum ilayya ahaasanakum akhlaaqaa",en:"The most beloved to me among you are those with the best character.",hi:"मुझे तुममें सबसे ज़्यादा प्यारा वो शख्स है जिसके अख़लाक़ सबसे अच्छे हों।",source:"Bukhari",topic:"Character"},
+  {day:21,arabic:"تَحَرَّوْا لَيْلَةَ الْقَدْرِ فِي الْوِتْرِ مِنَ الْعَشْرِ الأَوَاخِرِ مِنْ رَمَضَانَ",translit:"Taharraw laylatal-Qadri fil-witri minal-'ashril-awaakhir",en:"Seek Laylatul Qadr in the odd nights of the last ten days of Ramadan.",hi:"रमज़ान के आखिरी दस दिनों की ताक रातों में शब-ए-क़द्र तलाश करो।",source:"Bukhari",topic:"Laylatul Qadr"},
+  {day:22,arabic:"لَيْلَةُ الْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ",translit:"Laylatul-Qadri khayrun min alfi shahr",en:"The Night of Decree (Laylatul Qadr) is better than a thousand months.",hi:"शब-ए-क़द्र हज़ार महीनों से बेहतर है।",source:"Quran 97:3",topic:"Laylatul Qadr"},
+  {day:23,arabic:"اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",translit:"Allahumma innaka 'afuwwun tuhibbul-'afwa fa'fu 'anni",en:"O Allah, You are the Pardoner, You love to pardon, so pardon me. (Best dua for Laylatul Qadr)",hi:"ऐ अल्लाह! तू माफ़ करने वाला है, माफ़ी को पसंद करता है, पस मुझे माफ़ फरमा। (शब-ए-क़द्र की बेहतरीन दुआ)",source:"Tirmidhi",topic:"Forgiveness"},
+  {day:24,arabic:"الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ كَفَّارَةٌ لِمَا بَيْنَهُنَّ",translit:"As-salawaatul-khamsu wal-jumu'atu ilal-jumu'ati kaffaaratun lima baynahunna",en:"The five daily prayers and Friday to Friday are expiation for whatever sins occur between them.",hi:"पांच नमाज़ें और जुमे से जुमे तक दरमियानी गुनाहों का कफ्फारा हैं।",source:"Muslim",topic:"Prayer"},
+  {day:25,arabic:"الطَّهُورُ شَطْرُ الإِيمَانِ",translit:"At-tahoor shatrul-eemaan",en:"Purification is half of faith.",hi:"पाकीज़गी आधा ईमान है।",source:"Muslim",topic:"Purification"},
+  {day:26,arabic:"بُنِيَ الإِسْلَامُ عَلَى خَمْسٍ",translit:"Buniyal-Islaamu 'ala khams: shahaadati an la ilaha illallah...",en:"Islam is built on five pillars: testimony of faith, prayer, zakat, fasting Ramadan, and Hajj.",hi:"इस्लाम पांच स्तम्भों पर क़ायम है: कलमा शहादत, नमाज़, ज़कात, रमज़ान के रोज़े और हज।",source:"Bukhari & Muslim",topic:"Pillars of Islam"},
+  {day:27,arabic:"صِلُوا أَرْحَامَكُمْ",translit:"Siloo arhaama kum",en:"Maintain ties of kinship. Whoever wants expanded provision should maintain family ties.",hi:"अपने रिश्तेदारों से तअल्लुक़ रखो। जो रिज़्क़ में वुसअत और उम्र में बरकत चाहे वो सिला-ए-रहम करे।",source:"Bukhari & Muslim",topic:"Family"},
+  {day:28,arabic:"اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا",translit:"Ittaqillaha haythuma kunta wa atbi'is-sayyi'atal-hasanata tamhaha",en:"Fear Allah wherever you are; follow a bad deed with a good one to erase it; treat people with good character.",hi:"जहां भी हो अल्लाह से डरो, बुराई के बाद नेकी करो जो उसे मिटा दे, और लोगों से अच्छे अख़लाक़ से पेश आओ।",source:"Tirmidhi",topic:"Taqwa"},
+  {day:29,arabic:"إِنَّ اللَّهَ لَا يَنْظُرُ إِلَى أَجْسَامِكُمْ وَلَا إِلَى صُوَرِكُمْ وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ",translit:"Innallaha la yanzuru ila ajsaamikum wa la ila suwarikum wa laakin yanzuru ila quloobikum",en:"Allah does not look at your bodies or faces, but He looks at your hearts and deeds.",hi:"अल्लाह तुम्हारे जिस्मों और चेहरों को नहीं देखता बल्कि तुम्हारे दिलों और अमल को देखता है।",source:"Muslim",topic:"Sincerity"},
+  {day:30,arabic:"إِذَا مَاتَ ابْنُ آدَمَ انْقَطَعَ عَمَلُهُ إِلَّا مِنْ ثَلَاثٍ",translit:"Idha maata ibnu Adama inqata'a 'amaluhu illa min thalaath",en:"When a person dies, all deeds stop except three: ongoing charity, beneficial knowledge, or a righteous child who prays.",hi:"जब इंसान मर जाता है तो उसके अमल मुनक़ता हो जाते हैं सिवाए तीन के: सदका-ए-जारिया, नाफे इल्म, या नेक औलाद जो दुआ करे।",source:"Muslim",topic:"Legacy"}
+];
+
+// ══════════════════════════════
+// DUA DATA — Authentic, Arabic + English + Hindi, NO Urdu, NO Pakistan flag
+// ══════════════════════════════
+const duaData = {
+  "Ramadan":[
+    {name:"Niyyat for Roza",arabic:"وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ",translit:"Wa bisawmi ghadin nawaytu min shahri Ramadhan",en:"I intend to keep the fast tomorrow in the month of Ramadan.",hi:"मैंने माह-ए-रमज़ान में कल का रोज़ा रखने की नीयत की।",source:"Traditional"},
+    {name:"Dua for Iftar",arabic:"اللَّهُمَّ لَكَ صُمْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ",translit:"Allahumma laka sumtu wa 'ala rizqika aftartu",en:"O Allah, for You I fasted and upon Your provision I break my fast.",hi:"ऐ अल्लाह! मैंने तेरे लिए रोज़ा रखा और तेरे रिज़्क़ से इफ्तार किया।",source:"Abu Dawud"},
+    {name:"Dua after Iftar",arabic:"ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ",translit:"Dhahabaẓ-ẓama'u wabtallatil-'urooqu wa thabatal-ajru insha'Allah",en:"The thirst is gone, the veins are moistened, and the reward is confirmed, if Allah wills.",hi:"प्यास बुझ गई, रगें तर हो गईं और अजर साबित हो गया, इंशाअल्लाह।",source:"Abu Dawud"},
+    {name:"Dua for Laylatul Qadr",arabic:"اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",translit:"Allahumma innaka 'afuwwun tuhibbul-'afwa fa'fu 'anni",en:"O Allah, You are the Pardoner, You love to pardon, so pardon me.",hi:"ऐ अल्लाह! तू माफ़ करने वाला है, माफ़ी को पसंद करता है, पस मुझे माफ़ फरमा दे।",source:"Tirmidhi"},
+    {name:"Dua when seeing new Moon",arabic:"اللَّهُ أَكْبَرُ، اللَّهُمَّ أَهِلَّهُ عَلَيْنَا بِالأَمْنِ وَالإِيمَانِ",translit:"Allahu Akbar, Allahumma ahillahu 'alayna bil-amni wal-eemaan",en:"Allah is Greatest! O Allah, let this moon appear over us with security, faith, safety and Islam.",hi:"अल्लाह सबसे बड़ा है! ऐ अल्लाह! इस चांद को हम पर अमन, ईमान, सलामती और इस्लाम के साथ उगा।",source:"Tirmidhi"},
+    {name:"Dua for breaking fast with someone",arabic:"أَفْطَرَ عِنْدَكُمُ الصَّائِمُونَ، وَأَكَلَ طَعَامَكُمُ الأَبْرَارُ، وَصَلَّتْ عَلَيْكُمُ الْمَلَائِكَةُ",translit:"Aftara 'indakumus-saa'imoon, wa akala ta'aamakumul-abraar, wa sallat 'alaykumul-malaa'ikah",en:"May the fasting people break their fast at your home, the righteous eat your food, and the angels send blessings on you.",hi:"तुम्हारे यहां रोज़ेदारों ने इफ्तार किया, नेक लोगों ने तुम्हारा खाना खाया और फ़रिश्तों ने तुम पर दुरूद भेजा।",source:"Ibn Majah"}
+  ],
+  "Daily":[
+    {name:"Upon Waking Up",arabic:"الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",translit:"Alhamdu lillahil-ladhi ahyaana ba'da ma amaatana wa ilayhin-nushoor",en:"All praise is for Allah who gave us life after having taken it from us and unto Him is the resurrection.",hi:"सभी तारीफें अल्लाह की जिसने हमें मौत के बाद ज़िंदा किया और उसी की तरफ उठना है।",source:"Bukhari"},
+    {name:"Before Eating",arabic:"بِسْمِ اللَّهِ وَبَرَكَةِ اللَّهِ",translit:"Bismillahi wa barakatillah",en:"In the name of Allah and with the blessings of Allah.",hi:"अल्लाह के नाम से और अल्लाह की बरकत के साथ।",source:"Abu Dawud"},
+    {name:"After Eating",arabic:"الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",translit:"Alhamdu lillahil-ladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah",en:"Praise be to Allah Who has fed me this and provided it for me without any power or strength from me.",hi:"उस अल्लाह की हम्द है जिसने मुझे यह खाना खिलाया और मेरी ताक़त के बगैर रिज़्क़ दिया।",source:"Abu Dawud & Tirmidhi"},
+    {name:"Before Sleeping",arabic:"بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",translit:"Bismika Allahumma amootu wa ahya",en:"In Your name O Allah, I die and I live.",hi:"ऐ अल्लाह! तेरे नाम से मरता और जीता हूं।",source:"Bukhari"},
+    {name:"Entering the Home",arabic:"بِسْمِ اللَّهِ وَلَجْنَا وَبِسْمِ اللَّهِ خَرَجْنَا وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",translit:"Bismillahi walajna wa bismillahi kharajna wa 'alallahi rabbina tawakkalna",en:"In the name of Allah we enter, in the name of Allah we leave, and upon Allah we place our trust.",hi:"अल्लाह के नाम से दाखिल हुए और अल्लाह के नाम से निकले और अपने रब अल्लाह पर भरोसा किया।",source:"Abu Dawud"},
+    {name:"When Leaving Home",arabic:"بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",translit:"Bismillahi tawakkaltu 'alallahi wa la hawla wa la quwwata illa billah",en:"In the name of Allah, I trust in Allah, and there is no power and no strength except with Allah.",hi:"अल्लाह के नाम से, मैं अल्लाह पर भरोसा करता हूं, और अल्लाह के बगैर न कोई ताक़त है न कोई क़ुव्वत।",source:"Abu Dawud & Tirmidhi"},
+    {name:"Before Entering Bathroom",arabic:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ",translit:"Allahumma inni a'udhu bika minal-khubuthi wal-khabaa'ith",en:"O Allah, I seek refuge in You from male and female evil spirits.",hi:"ऐ अल्लाह! मैं तेरी पनाह मांगता हूं नर और मादा शैतानों से।",source:"Bukhari & Muslim"},
+    {name:"Dua for Parents",arabic:"رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",translit:"Rabbir hamhuma kama rabbayani sagheera",en:"My Lord, have mercy upon them as they brought me up when I was small.",hi:"ऐ मेरे रब! उन दोनों पर रहम कर जैसे उन्होंने मुझे बचपन में पाला।",source:"Quran 17:24"}
+  ],
+  "Prayer":[
+    {name:"Dua-e-Qunoot (Witr)",arabic:"اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ وَعَافِنِي فِيمَنْ عَافَيْتَ وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ",translit:"Allahummahdinee feeman hadayt wa 'aafinee feeman 'aafayt wa tawallanee feeman tawallayt",en:"O Allah, guide me among those You guided, grant me health among those You healed, and care for me among those You cared for.",hi:"ऐ अल्लाह! मुझे हिदायत दे उनमें से जिन्हें तूने हिदायत दी, मुझे आफियत दे उनमें से जिन्हें तूने आफियत दी।",source:"Abu Dawud & Tirmidhi"},
+    {name:"After Salah — Tasbeeh",arabic:"سُبْحَانَ اللَّهِ ×٣٣ • الْحَمْدُ لِلَّهِ ×٣٣ • اللَّهُ أَكْبَرُ ×٣٣",translit:"SubhanAllah ×33 • Alhamdulillah ×33 • Allahu Akbar ×33",en:"Glory be to Allah (33x), Praise be to Allah (33x), Allah is Greatest (33x), then complete 100 with La ilaha illallah.",hi:"सुब्हान अल्लाह ३३ बार, अल्हम्दुलिल्लाह ३३ बार, अल्लाहु अकबर ३३ बार। फिर ला इलाहा इल्लल्लाह से सौ पूरे करें।",source:"Muslim"},
+    {name:"After Adhan",arabic:"اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلَاةِ الْقَائِمَةِ آتِ مُحَمَّدًا الْوَسِيلَةَ",translit:"Allahumma Rabba hadhihid-da'watit-taammah was-salatil-qaa'imah, aati Muhammadan al-waseelata",en:"O Allah, Lord of this perfect call and the prayer to be performed, grant Muhammad the right of intercession.",hi:"ऐ अल्लाह! इस कामिल पुकार और क़ायम होने वाली नमाज़ के रब, हज़रत मुहम्मद ﷺ को वसीला और फ़ज़ीलत अता फरमा।",source:"Bukhari"},
+    {name:"Entering Masjid",arabic:"اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",translit:"Allahummaf-tah li abwaaba rahmatik",en:"O Allah, open for me the doors of Your mercy.",hi:"ऐ अल्लाह! मेरे लिए अपनी रहमत के दरवाज़े खोल दे।",source:"Muslim"},
+    {name:"Leaving Masjid",arabic:"اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",translit:"Allahumma inni as'aluka min fadlik",en:"O Allah, I ask You of Your bounty.",hi:"ऐ अल्लाह! मैं तुझसे तेरे फ़ज़्ल का सवाल करता हूं।",source:"Muslim"}
+  ],
+  "Protection":[
+    {name:"Ayatul Kursi — The Greatest Verse",arabic:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ",translit:"Allahu la ilaha illa huwal-hayyul-qayyoom, la ta'khudhuhu sinatun wa la nawm, lahu ma fis-samaawaati wa ma fil-ard",en:"Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and the earth. (Quran 2:255)",hi:"अल्लाह — उसके सिवा कोई माबूद नहीं, हमेशा ज़िंदा, क़ायम रहने वाला। उसे न ऊंघ आती है न नींद। आसमानों और ज़मीन में जो कुछ है सब उसी का है। (क़ुरआन 2:255)",source:"Quran 2:255"},
+    {name:"Morning & Evening Protection",arabic:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",translit:"Bismillahil-ladhi la yadurru ma'asmihi shay'un fil-ardi wa la fis-samaa'i wa huwas-Samee'ul-'Aleem",en:"In the name of Allah with Whose name nothing can cause harm on earth or in heaven. He is the All-Hearing, All-Knowing. (Recite 3 times morning & evening)",hi:"अल्लाह के नाम से, जिसके नाम के साथ ज़मीन व आसमान में कोई चीज़ नुकसान नहीं दे सकती। वो सुनने और जानने वाला है। (सुबह-शाम 3 बार पढ़ें)",source:"Abu Dawud & Tirmidhi"},
+    {name:"Against Evil Eye (Nazar)",arabic:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",translit:"A'udhu bikalimaatillahit-taammati min sharri ma khalaq",en:"I seek refuge in the perfect words of Allah from the evil of what He has created.",hi:"मैं अल्लाह के कामिल कलिमात की पनाह मांगता हूं उसकी मख़लूक़ के शर से।",source:"Muslim"},
+    {name:"Against Anxiety & Worry",arabic:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ وَالْعَجْزِ وَالْكَسَلِ وَالْبُخْلِ وَالْجُبْنِ",translit:"Allahumma inni a'udhu bika minal-hammi wal-hazan wal-'ajzi wal-kasali wal-bukhli wal-jubn",en:"O Allah, I seek refuge in You from worry, grief, incapacity, laziness, miserliness, and cowardice.",hi:"ऐ अल्लाह! मैं तेरी पनाह मांगता हूं फ़िक्र, ग़म, बेबसी, सुस्ती, कंजूसी और बुज़दिली से।",source:"Bukhari"},
+    {name:"Dua for Travelling",arabic:"سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ",translit:"Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrineen, wa inna ila rabbina lamunqaliboon",en:"Glory be to Him who has made this subservient to us, and we could not have done it ourselves, and to our Lord we will return.",hi:"पाक है वो ज़ात जिसने हमारे लिए इसे मुसख्खर किया और हम इसे क़ाबू नहीं कर सकते थे, और हम अपने रब की तरफ लौटने वाले हैं।",source:"Quran 43:13-14"}
+  ],
+  "Forgiveness":[
+    {name:"Sayyidul Istighfar — Master Forgiveness",arabic:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",translit:"Allahumma anta Rabbi la ilaha illa anta, khalaqtani wa ana 'abduk, wa ana 'ala 'ahdika wa wa'dika mastata't, a'udhu bika min sharri ma sana't, aboo'u laka bini'matika 'alayya, wa aboo'u bidhanbee faghfir lee fa-innahu la yaghfirudh-dhunooba illa ant",en:"O Allah, You are my Lord. None has the right to be worshipped but You. You created me and I am Your servant. I covenant to keep Your pledge as best I can. I seek refuge in You from the evil I have done. I acknowledge Your favor upon me, and I confess my sin. So forgive me, for none forgives sins except You.",hi:"ऐ अल्लाह! तू मेरा रब है, तेरे सिवा कोई माबूद नहीं। तूने मुझे पैदा किया और मैं तेरा बंदा हूं। मैं अपनी ताक़त भर तेरे अहद और वादे पर क़ायम हूं। मैं अपने किए की बुराई से तेरी पनाह मांगता हूं। मैं तेरी नेमत का इक़रार करता हूं और अपने गुनाह का भी। पस मुझे माफ़ फरमा, तेरे सिवा कोई गुनाह नहीं बख्शता।",source:"Bukhari"},
+    {name:"Short Istighfar",arabic:"أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",translit:"Astaghfirullahal-'azeemil-ladhi la ilaha illa huwal-hayyul-qayyoom wa atubu ilaih",en:"I seek forgiveness from Allah the Magnificent, the Living, the Eternal, and I repent to Him.",hi:"मैं अल्लाह अज़ीम से माफ़ी मांगता हूं जिसके सिवा कोई माबूद नहीं, हमेशा ज़िंदा और क़ायम, और उसकी तरफ तौबा करता हूं।",source:"Abu Dawud & Tirmidhi"},
+    {name:"Dua for Forgiveness of Parents",arabic:"رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ",translit:"Rabbigh-fir lee wa liwaalidayya walil-mu'mineena yawma yaqoomul-hisaab",en:"My Lord, forgive me and my parents and the believers on the Day when the account is established.",hi:"ऐ मेरे रब! मुझे, मेरे वालिदैन को और मोमिनों को उस दिन माफ़ फरमा जब हिसाब क़ायम होगा।",source:"Quran 14:41"},
+    {name:"Dua of Prophet Yunus (AS)",arabic:"لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ",translit:"La ilaha illa anta subhanaka inni kuntu minaz-zaalimeen",en:"None has the right to be worshipped except You, glory be to You, indeed I have been of the wrongdoers.",hi:"तेरे सिवा कोई माबूद नहीं, तू पाक है, बेशक मैं ज़ालिमों में से था।",source:"Quran 21:87"}
+  ],
+  "4 Qul":[
+    {name:"Qul 1 — Surah Al-Ikhlas (112)",arabic:"قُلْ هُوَ اللَّهُ أَحَدٌ ﴿١﴾ اللَّهُ الصَّمَدُ ﴿٢﴾ لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴿٤﴾",translit:"Qul huwallahu ahad. Allahus-samad. Lam yalid wa lam yoolad. Wa lam yakun lahu kufuwan ahad.",en:"Say: He is Allah, the One. Allah, the Eternal Refuge. He neither begets nor was born. Nor is there to Him any equivalent.",hi:"कहो: वो अल्लाह एक है। अल्लाह बेनियाज़ है। न उसने किसी को जना और न वो जना गया। और न उसका कोई हमसर है।",source:"Quran 112"},
+    {name:"Qul 2 — Surah Al-Kafirun (109)",arabic:"قُلْ يَا أَيُّهَا الْكَافِرُونَ ﴿١﴾ لَا أَعْبُدُ مَا تَعْبُدُونَ ﴿٢﴾ وَلَا أَنتُمْ عَابِدُونَ مَا أَعْبُدُ ﴿٣﴾ وَلَا أَنَا عَابِدٌ مَّا عَبَدتُّمْ ﴿٤﴾ وَلَا أَنتُمْ عَابِدُونَ مَا أَعْبُدُ ﴿٥﴾ لَكُمْ دِينُكُمْ وَلِيَ دِينِ ﴿٦﴾",translit:"Qul yaa ayyuhal-kaafiroon. Laa a'budu maa ta'budoon. Wa laa antum 'aabidoona maa a'bud. Wa laa ana 'aabidun maa 'abattum. Wa laa antum 'aabidoona maa a'bud. Lakum deenukum wa liya deen.",en:"Say: O disbelievers! I do not worship what you worship. Nor do you worship what I worship. For you is your religion and for me is my religion.",hi:"कहो: ऐ काफिरो! मैं उसकी इबादत नहीं करता जिसकी तुम इबादत करते हो। और न तुम उसकी इबादत करते हो जिसकी मैं इबादत करता हूं। तुम्हारे लिए तुम्हारा दीन और मेरे लिए मेरा दीन।",source:"Quran 109"},
+    {name:"Qul 3 — Surah Al-Falaq (113)",arabic:"قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ﴿١﴾ مِن شَرِّ مَا خَلَقَ ﴿٢﴾ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ﴿٣﴾ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ﴿٤﴾ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴿٥﴾",translit:"Qul a'udhu birabbil-falaq. Min sharri maa khalaq. Wa min sharri ghaasiqin idhaa waqab. Wa min sharrin-naffaathaati fil-'uqad. Wa min sharri haasidin idhaa hasad.",en:"Say: I seek refuge in the Lord of daybreak. From the evil of what He created. From the evil of darkness when it settles. From the evil of blowers in knots. From the evil of an envier when he envies.",hi:"कहो: मैं सुबह के रब की पनाह मांगता हूं। उसकी मख़लूक़ के शर से। अंधेरी रात के शर से। गिरहों में फूंकने वालों के शर से। और हसद करने वाले के शर से।",source:"Quran 113"},
+    {name:"Qul 4 — Surah An-Nas (114)",arabic:"قُلْ أَعُوذُ بِرَبِّ النَّاسِ ﴿١﴾ مَلِكِ النَّاسِ ﴿٢﴾ إِلَٰهِ النَّاسِ ﴿٣﴾ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ﴿٤﴾ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ﴿٥﴾ مِنَ الْجِنَّةِ وَالنَّاسِ ﴿٦﴾",translit:"Qul a'udhu birabbin-naas. Malikin-naas. Ilaahin-naas. Min sharril waswaasil-khannaas. Alladhee yuwaswisu fee sudoorin-naas. Minal-jinnati wan-naas.",en:"Say: I seek refuge in the Lord of mankind. The Sovereign of mankind. The God of mankind. From the evil of the retreating whisperer — who whispers in the breasts of mankind — from jinn and mankind.",hi:"कहो: मैं इंसानों के रब की पनाह मांगता हूं। इंसानों के बादशाह की। इंसानों के माबूद की। वसवसा डालने वाले के शर से जो पीठ फेर लेता है — जो इंसानों के सीनों में वसवसा डालता है — जिन्नों और इंसानों में से।",source:"Quran 114"}
+  ],
+  "Durood Sharif":[
+    {name:"Durood Ibrahim — (Read in Salah)",arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",translit:"Allahumma salli 'ala Muhammadin wa 'ala aali Muhammadin kamaa sallayta 'ala Ibraaheema wa 'ala aali Ibraaheema innaka Hameedun Majeed. Allahumma baarik 'ala Muhammadin wa 'ala aali Muhammadin kamaa baarakta 'ala Ibraaheema innaka Hameedun Majeed.",en:"O Allah, send Your grace on Muhammad ﷺ and his family as You sent grace on Ibrahim and his family. You are Praiseworthy, Glorious. O Allah, send blessings on Muhammad ﷺ and his family as You blessed Ibrahim and his family. You are Praiseworthy, Glorious.",hi:"ऐ अल्लाह! मुहम्मद ﷺ पर और आल-ए-मुहम्मद पर रहमत नाज़िल फरमा जैसे तूने इब्राहीम और आल-ए-इब्राहीम पर रहमत नाज़िल फरमाई। बेशक तू क़ाबिल-ए-तारीफ और बुज़ुर्गी वाला है।",source:"Bukhari & Muslim"},
+    {name:"Durood-e-Tunajjina",arabic:"اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ صَلَاةً تُنَجِّينَا بِهَا مِنْ جَمِيعِ الْأَهْوَالِ وَالْآفَاتِ",translit:"Allahumma salli 'ala sayyidina Muhammadin salaatan tunajjeena bihaa min jamee'il ahwaali wal-aafaat",en:"O Allah, send blessings upon our Master Muhammad ﷺ by which You save us from all fears and afflictions.",hi:"ऐ अल्लाह! हमारे सरदार मुहम्मद ﷺ पर ऐसी रहमत नाज़िल फरमा जिससे तू हमें तमाम ख़ौफ़ और आफ़ात से नजात दे।",source:"Traditional"},
+    {name:"Short Durood",arabic:"صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",translit:"Sallallahu 'alayhi wa sallam",en:"May Allah's blessings and peace be upon him ﷺ — Say this every time the Prophet's name is mentioned.",hi:"अल्लाह की रहमत और सलामती हो उन पर ﷺ — नबी ﷺ का नाम सुनते ही पढ़ें।",source:"Quran 33:56"}
+  ]
+};
+
+// ══════════════════════════════
+// RAJNANDGAON TIMETABLE 2026
+// ══════════════════════════════
+const rajnandgaonTimetable = [
+  {roza:1,  date:"19/2/2026",  dayIdx:4, sehri:"5:12 AM", iftar:"6:11 PM"},
+  {roza:2,  date:"20/2/2026",  dayIdx:5, sehri:"5:12 AM", iftar:"6:11 PM"},
+  {roza:3,  date:"21/2/2026",  dayIdx:6, sehri:"5:11 AM", iftar:"6:12 PM"},
+  {roza:4,  date:"22/2/2026",  dayIdx:0, sehri:"5:11 AM", iftar:"6:12 PM"},
+  {roza:5,  date:"23/2/2026",  dayIdx:1, sehri:"5:10 AM", iftar:"6:13 PM"},
+  {roza:6,  date:"24/2/2026",  dayIdx:2, sehri:"5:10 AM", iftar:"6:13 PM"},
+  {roza:7,  date:"25/2/2026",  dayIdx:3, sehri:"5:09 AM", iftar:"6:14 PM"},
+  {roza:8,  date:"26/2/2026",  dayIdx:4, sehri:"5:08 AM", iftar:"6:14 PM"},
+  {roza:9,  date:"27/2/2026",  dayIdx:5, sehri:"5:08 AM", iftar:"6:14 PM"},
+  {roza:10, date:"28/2/2026",  dayIdx:6, sehri:"5:07 AM", iftar:"6:15 PM"},
+  {roza:11, date:"1/3/2026",   dayIdx:0, sehri:"5:06 AM", iftar:"6:15 PM"},
+  {roza:12, date:"2/3/2026",   dayIdx:1, sehri:"5:05 AM", iftar:"6:16 PM"},
+  {roza:13, date:"3/3/2026",   dayIdx:2, sehri:"5:04 AM", iftar:"6:16 PM"},
+  {roza:14, date:"4/3/2026",   dayIdx:3, sehri:"5:03 AM", iftar:"6:17 PM"},
+  {roza:15, date:"5/3/2026",   dayIdx:4, sehri:"5:02 AM", iftar:"6:17 PM"},
+  {roza:16, date:"6/3/2026",   dayIdx:5, sehri:"5:02 AM", iftar:"6:18 PM"},
+  {roza:17, date:"7/3/2026",   dayIdx:6, sehri:"5:01 AM", iftar:"6:18 PM"},
+  {roza:18, date:"8/3/2026",   dayIdx:0, sehri:"5:00 AM", iftar:"6:18 PM"},
+  {roza:19, date:"9/3/2026",   dayIdx:1, sehri:"4:59 AM", iftar:"6:19 PM"},
+  {roza:20, date:"10/3/2026",  dayIdx:2, sehri:"4:59 AM", iftar:"6:19 PM"},
+  {roza:21, date:"11/3/2026",  dayIdx:3, sehri:"4:58 AM", iftar:"6:19 PM"},
+  {roza:22, date:"12/3/2026",  dayIdx:4, sehri:"4:57 AM", iftar:"6:20 PM"},
+  {roza:23, date:"13/3/2026",  dayIdx:5, sehri:"4:56 AM", iftar:"6:20 PM"},
+  {roza:24, date:"14/3/2026",  dayIdx:6, sehri:"4:56 AM", iftar:"6:20 PM"},
+  {roza:25, date:"15/3/2026",  dayIdx:0, sehri:"4:55 AM", iftar:"6:21 PM"},
+  {roza:26, date:"16/3/2026",  dayIdx:1, sehri:"4:54 AM", iftar:"6:21 PM"},
+  {roza:27, date:"17/3/2026",  dayIdx:2, sehri:"4:52 AM", iftar:"6:21 PM"},
+  {roza:28, date:"18/3/2026",  dayIdx:3, sehri:"4:51 AM", iftar:"6:21 PM"},
+  {roza:29, date:"19/3/2026",  dayIdx:4, sehri:"4:50 AM", iftar:"6:22 PM"},
+  {roza:30, date:"20/3/2026",  dayIdx:5, sehri:"4:49 AM", iftar:"6:22 PM"}
+];
+
+const tasbeehItems = [
+  {arabic:"سُبْحَانَ اللَّهِ",en:"SubhanAllah",target:33},
+  {arabic:"الْحَمْدُ لِلَّهِ",en:"Alhamdulillah",target:33},
+  {arabic:"اللَّهُ أَكْبَرُ",en:"Allahu Akbar",target:33},
+  {arabic:"لَا إِلَٰهَ إِلَّا اللَّهُ",en:"La ilaha illallah",target:100},
+  {arabic:"أَسْتَغْفِرُ اللَّهَ",en:"Astaghfirullah",target:100},
+  {arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",en:"Durood Ibrahim",target:100}
+];
+
+// ══════════════════════════════
+// FIREBASE AUTH
+// ══════════════════════════════
+let currentUserData = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    await loadUserData(user);
+    launchApp();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('mainApp').style.display = 'none';
+  }
+});
+
+async function loadUserData(user) {
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    currentUserData = snap.data();
+  } else {
+    currentUserData = {name: user.displayName||'Friend', email: user.email, tasbeehTotal:0, hadithRead:0, daysActive:1, createdAt: serverTimestamp()};
+    await setDoc(ref, currentUserData);
+  }
+}
+
+async function saveUserData(updates) {
+  if (!auth.currentUser) return;
+  try {
+    const ref = doc(db, 'users', auth.currentUser.uid);
+    await updateDoc(ref, updates);
+    Object.assign(currentUserData, updates);
+  } catch(e) { console.error('Save error:', e); }
+}
+
+function launchApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  const user = auth.currentUser;
+  const name = user ? (user.displayName || user.email.split('@')[0]) : 'Guest';
+  document.getElementById('headerUserName').textContent = '👤 ' + name;
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileEmail').textContent = user ? user.email : 'guest@ramadan.app';
+  document.getElementById('editName').value = name;
+  if (currentUserData) {
+    document.getElementById('statTasbeeh').textContent = currentUserData.tasbeehTotal || 0;
+    document.getElementById('statHadith').textContent = currentUserData.hadithRead || 0;
+    document.getElementById('statDays').textContent = currentUserData.daysActive || 0;
+  }
+  initApp();
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Please fill all fields.'; err.style.display='block'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    const msgs = {'auth/invalid-credential':'Wrong email or password.','auth/user-not-found':'No account found.','auth/wrong-password':'Wrong password.','auth/invalid-email':'Invalid email.'};
+    err.textContent = msgs[e.code] || 'Login failed. Try again.';
+    err.style.display = 'block';
+  }
+}
+
+async function doSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const pass = document.getElementById('signupPassword').value;
+  const err = document.getElementById('signupError');
+  const suc = document.getElementById('signupSuccess');
+  err.style.display = 'none'; suc.style.display = 'none';
+  if (!name || !email || !pass) { err.textContent = 'Please fill all fields.'; err.style.display='block'; return; }
+  if (pass.length < 6) { err.textContent = 'Password must be at least 6 characters.'; err.style.display='block'; return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, {displayName: name});
+  } catch(e) {
+    const msgs = {'auth/email-already-in-use':'Email already registered.','auth/invalid-email':'Invalid email address.'};
+    err.textContent = msgs[e.code] || 'Signup failed. Try again.';
+    err.style.display = 'block';
+  }
+}
+
+async function doForgotPassword() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const err = document.getElementById('loginError');
+  const suc = document.getElementById('forgotSuccess');
+  err.style.display='none'; suc.style.display='none';
+  if (!email) { err.textContent = 'Please enter your email above first.'; err.style.display='block'; return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    suc.textContent = '✅ Reset email sent to ' + email + ' — Check your inbox!';
+    suc.style.display = 'block';
+  } catch(e) {
+    const msgs = {'auth/user-not-found':'No account found with this email.','auth/invalid-email':'Invalid email address.'};
+    err.textContent = msgs[e.code] || 'Could not send reset email.';
+    err.style.display = 'block';
+  }
+}
+
+function continueAsGuest() {
+  currentUserData = {name:'Guest', email:'', tasbeehTotal:0, hadithRead:0, daysActive:0};
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  launchApp();
+}
+
+async function doLogout() {
+  await signOut(auth);
+  showToast(UI[currentLang].loggedOut);
+}
+
+async function saveName() {
+  const name = document.getElementById('editName').value.trim();
+  if (!name) return;
+  if (auth.currentUser) {
+    await updateProfile(auth.currentUser, {displayName: name});
+    await saveUserData({name});
+  }
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('headerUserName').textContent = '👤 ' + name;
+  showToast(UI[currentLang].savedName);
+}
+
+function switchAuthTab(tab) {
+  document.getElementById('loginForm').style.display = tab==='login' ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = tab==='signup' ? 'block' : 'none';
+  document.getElementById('loginTabBtn').classList.toggle('active', tab==='login');
+  document.getElementById('signupTabBtn').classList.toggle('active', tab==='signup');
+}
+
+// ══════════════════════════════
+// TIMETABLE & ROZA
+// ══════════════════════════════
+function getTodayRoza() {
+  const today = new Date();
+  return rajnandgaonTimetable.find(r => {
+    const parts = r.date.split('/');
+    const d = new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+    return d.getDate()===today.getDate() && d.getMonth()===today.getMonth() && d.getFullYear()===today.getFullYear();
+  }) || null;
+}
+
+function buildTimetable() {
+  const tbody = document.getElementById('timetableBody');
+  if (!tbody) return;
+  const todayRoza = getTodayRoza();
+  const T = UI[currentLang];
+  const days = T.days;
+  tbody.innerHTML = rajnandgaonTimetable.map((r,i) => {
+    const isToday = todayRoza && todayRoza.roza === r.roza;
+    const bg = isToday ? 'background:var(--gold-light);font-weight:700;' : (i%2===0?'background:#fafff9;':'');
+    const border = isToday ? 'border-left:4px solid var(--gold);' : 'border-left:4px solid transparent;';
+    const badge = isToday ? ` ${T.todayBadge}` : '';
+    const dayName = days[r.dayIdx];
+    return `<tr style="${bg}${border}">
+      <td style="padding:0.6rem 0.5rem;text-align:center;color:${isToday?'var(--gold)':'var(--green)'};font-weight:700;font-size:0.9rem;">${r.roza}${badge}</td>
+      <td style="padding:0.6rem 0.5rem;text-align:center;font-size:0.82rem;">${r.date}<br><span style="font-size:0.7rem;color:var(--muted);">${dayName}</span></td>
+      <td style="padding:0.6rem 0.5rem;text-align:center;font-weight:600;color:#1a5c35;">${r.sehri}</td>
+      <td style="padding:0.6rem 0.5rem;text-align:center;font-weight:600;color:#c9622f;">${r.iftar}</td>
+    </tr>`;
+  }).join('');
+}
+
+function updateHomeRozaCard() {
+  const card = document.getElementById('rozaHomeCard');
+  const todayRoza = getTodayRoza();
+  const T = UI[currentLang];
+  if (todayRoza) {
+    card.style.display = 'block';
+    document.getElementById('rozaNumber').textContent = T.roza + ' ' + todayRoza.roza + ' 🌙';
+    document.getElementById('rozaDate').textContent = todayRoza.date + ' — ' + T.days[todayRoza.dayIdx];
+    document.getElementById('homeSehri').textContent = todayRoza.sehri;
+    document.getElementById('homeIftar').textContent = todayRoza.iftar;
+  } else {
+    card.style.display = 'none';
+  }
+}
+
+// ══════════════════════════════
+// COUNTDOWN
+// ══════════════════════════════
+function updateCountdown() {
+  const bar = document.getElementById('countdownBar');
+  if (!bar) return;
+  const T = UI[currentLang];
+  const todayRoza = getTodayRoza();
+  if (todayRoza) {
+    bar.innerHTML = `🌙 ${T.ramadanDay} <span>${todayRoza.roza}</span> of 30 — ${T.mayAllah}`;
+  } else {
+    const now = new Date();
+    const ramStart = new Date('2026-02-19T00:00:00');
+    const ramEnd   = new Date('2026-03-20T23:59:59');
+    if (now < ramStart) {
+      const diff = Math.ceil((ramStart - now) / 86400000);
+      bar.innerHTML = `🌙 <span>${diff}</span> ${T.daysUntil}`;
+    } else if (now > ramEnd) {
+      bar.innerHTML = `🌙 ${T.ramadanEnded}`;
+    }
+  }
+}
+
+// ══════════════════════════════
+// HADITH
+// ══════════════════════════════
+function buildDayPicker() {
+  const p = document.getElementById('dayPicker');
+  p.innerHTML = '';
+  const todayRoza = getTodayRoza();
+  for (let i=1; i<=30; i++) {
+    const b = document.createElement('button');
+    b.className = 'day-btn' + (i===1?' active':'') + (todayRoza&&todayRoza.roza===i?' today':'');
+    b.textContent = i;
+    b.onclick = () => {
+      loadHadith(i);
+      document.querySelectorAll('.day-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+    };
+    p.appendChild(b);
+  }
+}
+
+function loadHadith(day) {
+  const h = hadithData[day-1];
+  const T = UI[currentLang];
+  document.getElementById('hadithCard').innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="badge">${T.navHadith} ${day}</div>
+        <h3>${h.topic}</h3>
+        <button class="copy-btn" onclick="copyText('h${day}')">${T.copyBtn}</button>
+      </div>
+      <div class="arabic" id="h${day}">${h.arabic}</div>
+      <div class="transliteration">${h.translit}</div>
+      <div class="translation-en">🇬🇧 ${h.en}</div>
+      <div class="translation-hi">🇮🇳 ${h.hi}</div>
+      <span class="hadith-source">📚 ${h.source}</span>
+    </div>`;
+  if (auth.currentUser && currentUserData) {
+    const newCount = (currentUserData.hadithRead||0)+1;
+    saveUserData({hadithRead: newCount});
+    document.getElementById('statHadith').textContent = newCount;
+  }
+}
+
+// ══════════════════════════════
+// DUAS
+// ══════════════════════════════
+function buildDuaCats() {
+  const t = document.getElementById('duaCatTabs');
+  t.innerHTML = '';
+  Object.keys(duaData).forEach(cat => {
+    const b = document.createElement('button');
+    b.className = 'dua-cat-btn' + (cat==='Ramadan'?' active':'');
+    b.textContent = cat;
+    b.dataset.cat = cat;
+    b.onclick = () => {
+      loadDuas(cat);
+      document.querySelectorAll('.dua-cat-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+    };
+    t.appendChild(b);
+  });
+}
+
+function loadDuas(cat) {
+  const T = UI[currentLang];
+  document.getElementById('duasList').innerHTML = duaData[cat].map((d,i) => `
+    <div class="card" style="animation-delay:${i*0.06}s">
+      <div class="card-header">
+        <h3>${d.name}</h3>
+        <button class="copy-btn" onclick="copyText('d${cat}${i}')">${T.copyBtn}</button>
+      </div>
+      <div class="arabic" id="d${cat}${i}">${d.arabic}</div>
+      <div class="transliteration">${d.translit}</div>
+      <div class="translation-en">🇬🇧 ${d.en}</div>
+      <div class="translation-hi">🇮🇳 ${d.hi}</div>
+      <span class="hadith-source">📚 ${d.source}</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════
+// TASBEEH
+// ══════════════════════════════
+let tasbeehCount=0, tasbeehRound=1, currentTasbeeh=0;
+
+function changeTasbeeh() {
+  currentTasbeeh = parseInt(document.getElementById('tasbeehSelect').value);
+  tasbeehCount = 0; tasbeehRound = 1;
+  updateTasbeehUI();
+}
+
+function updateTasbeehUI() {
+  const t = tasbeehItems[currentTasbeeh];
+  document.getElementById('tasbeehCount').textContent = tasbeehCount;
+  document.getElementById('tasbeehLabel').textContent = t.arabic;
+  document.getElementById('tasbeehTarget').textContent = t.target;
+  document.getElementById('tasbeehRound').textContent = tasbeehRound;
+  document.getElementById('tasbeehBar').style.width = Math.min(tasbeehCount/t.target*100,100)+'%';
+}
+
+function incrementTasbeeh() {
+  const t = tasbeehItems[currentTasbeeh];
+  tasbeehCount++;
+  const el = document.getElementById('tasbeehCount');
+  el.classList.add('bump'); setTimeout(()=>el.classList.remove('bump'),100);
+  if (tasbeehCount >= t.target) {
+    tasbeehRound++; tasbeehCount = 0;
+    showToast('🎉 Round '+(tasbeehRound-1)+' — '+UI[currentLang].roundComplete);
+  }
+  updateTasbeehUI();
+  if (auth.currentUser && currentUserData) {
+    const newCount = (currentUserData.tasbeehTotal||0)+1;
+    saveUserData({tasbeehTotal: newCount});
+    document.getElementById('statTasbeeh').textContent = newCount;
+  }
+}
+
+function undoTasbeeh() { if(tasbeehCount>0){tasbeehCount--;updateTasbeehUI();} }
+function resetTasbeeh() { tasbeehCount=0;tasbeehRound=1;updateTasbeehUI(); }
+function setTarget() {
+  const v = prompt(currentLang==='hi'?'लक्ष्य दर्ज करें:':'Enter target:');
+  if (v&&!isNaN(v)&&+v>0) { tasbeehItems[currentTasbeeh].target=+v; updateTasbeehUI(); }
+}
+
+// ══════════════════════════════
+// PRAYER TIMES — Astronomical calculator (no API needed)
+// ══════════════════════════════
+const CITIES = {
+  'mumbai':{lat:19.0760,lng:72.8777,tz:5.5,name:'Mumbai'},
+  'delhi':{lat:28.6139,lng:77.2090,tz:5.5,name:'Delhi'},
+  'new delhi':{lat:28.6139,lng:77.2090,tz:5.5,name:'Delhi'},
+  'hyderabad':{lat:17.3850,lng:78.4867,tz:5.5,name:'Hyderabad'},
+  'chennai':{lat:13.0827,lng:80.2707,tz:5.5,name:'Chennai'},
+  'bangalore':{lat:12.9716,lng:77.5946,tz:5.5,name:'Bangalore'},
+  'bengaluru':{lat:12.9716,lng:77.5946,tz:5.5,name:'Bangalore'},
+  'kolkata':{lat:22.5726,lng:88.3639,tz:5.5,name:'Kolkata'},
+  'lucknow':{lat:26.8467,lng:80.9462,tz:5.5,name:'Lucknow'},
+  'jaipur':{lat:26.9124,lng:75.7873,tz:5.5,name:'Jaipur'},
+  'patna':{lat:25.5941,lng:85.1376,tz:5.5,name:'Patna'},
+  'bhopal':{lat:23.2599,lng:77.4126,tz:5.5,name:'Bhopal'},
+  'ahmedabad':{lat:23.0225,lng:72.5714,tz:5.5,name:'Ahmedabad'},
+  'pune':{lat:18.5204,lng:73.8567,tz:5.5,name:'Pune'},
+  'srinagar':{lat:34.0837,lng:74.7973,tz:5.5,name:'Srinagar'},
+  'raipur':{lat:21.2514,lng:81.6296,tz:5.5,name:'Raipur'},
+  'bhilai':{lat:21.1938,lng:81.3509,tz:5.5,name:'Bhilai'},
+  'rajnandgaon':{lat:20.9671,lng:81.0299,tz:5.5,name:'Rajnandgaon'},
+  'nagpur':{lat:21.1458,lng:79.0882,tz:5.5,name:'Nagpur'},
+  'indore':{lat:22.7196,lng:75.8577,tz:5.5,name:'Indore'},
+  'agra':{lat:27.1767,lng:78.0081,tz:5.5,name:'Agra'},
+  'varanasi':{lat:25.3176,lng:82.9739,tz:5.5,name:'Varanasi'},
+  'kanpur':{lat:26.4499,lng:80.3319,tz:5.5,name:'Kanpur'},
+  'surat':{lat:21.1702,lng:72.8311,tz:5.5,name:'Surat'},
+  'kochi':{lat:9.9312,lng:76.2673,tz:5.5,name:'Kochi'},
+  'ranchi':{lat:23.3441,lng:85.3096,tz:5.5,name:'Ranchi'},
+  'guwahati':{lat:26.1445,lng:91.7362,tz:5.5,name:'Guwahati'},
+  'amritsar':{lat:31.6340,lng:74.8723,tz:5.5,name:'Amritsar'},
+  'dubai':{lat:25.2048,lng:55.2708,tz:4,name:'Dubai'},
+  'riyadh':{lat:24.7136,lng:46.6753,tz:3,name:'Riyadh'},
+  'london':{lat:51.5074,lng:-0.1278,tz:0,name:'London'}
+};
+
+function calcPrayerTimes(lat,lng,tz,date){
+  const D2R=Math.PI/180,R2D=180/Math.PI;
+  const jd=Math.floor(365.25*(date.getFullYear()+4716))+Math.floor(30.6001*(date.getMonth()+2))+date.getDate()-1524.5;
+  const T=(jd-2451545)/36525;
+  const L0=(280.46646+36000.76983*T)%360;
+  const M=(357.52911+35999.05029*T)*D2R;
+  const C=(1.914602-0.004817*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M);
+  const sun=(L0+C)*D2R;
+  const e=(23.439291-0.013004*T)*D2R;
+  const ra=R2D*Math.atan2(Math.cos(e)*Math.sin(sun),Math.cos(sun))/15;
+  const dec=R2D*Math.asin(Math.sin(e)*Math.sin(sun));
+  const eqT=(L0+C-0.0057183-ra*15+(-((-0.00478)*Math.sin((125.04-1934.136*T)*D2R))))*4;
+  const noon=12-lng/15-eqT/60+tz;
+  function angleTime(angle,dir){
+    const cosH=(-Math.sin(angle*D2R)-Math.sin(lat*D2R)*Math.sin(dec*D2R))/(Math.cos(lat*D2R)*Math.cos(dec*D2R));
+    if(Math.abs(cosH)>1)return null;
+    const H=R2D*Math.acos(cosH)/15;
+    return dir==='rise'?noon-H:noon+H;
+  }
+  function shadowTime(sf){
+    const angle=R2D*Math.atan(1/(sf+Math.tan(Math.abs(lat-dec)*D2R)));
+    return angleTime(angle,'set');
+  }
+  function fmt(t){
+    if(!t)return'--:--';
+    let h=Math.floor(t),m=Math.round((t-h)*60);
+    if(m>=60){h++;m-=60;} h=h%24;
+    const ampm=h>=12?'PM':'AM'; h=h%12||12;
+    return h+':'+(m<10?'0':'')+m+' '+ampm;
+  }
+  return {
+    Fajr:fmt(angleTime(18,'rise')),
+    Sunrise:fmt(angleTime(0.833,'rise')),
+    Dhuhr:fmt(noon+0.00),
+    Asr:fmt(shadowTime(1)),
+    Maghrib:fmt(angleTime(0.833,'set')),
+    Isha:fmt(angleTime(17,'set'))
+  };
+}
+
+function quickCity(cityStr) {
+  document.getElementById('cityInput').value = cityStr.split(',')[0];
+  fetchPrayer();
+}
+
+function fetchPrayer() {
+  const input = document.getElementById('cityInput').value.trim().toLowerCase();
+  const result = document.getElementById('prayerResult');
+  const city = CITIES[input];
+  if (!city) {
+    result.innerHTML = `<div class="card"><p style="color:var(--red);text-align:center;">❌ City not found. Try: Lucknow, Raipur, Delhi, Mumbai...</p></div>`;
+    return;
+  }
+  const now = new Date();
+  const times = calcPrayerTimes(city.lat, city.lng, city.tz, now);
+  const T = UI[currentLang];
+  result.innerHTML = `<div class="card">
+    <div class="card-header"><h3>🕌 ${T.prayerFor} ${city.name}</h3></div>
+    <div class="prayer-grid">
+      <div class="prayer-item"><div class="prayer-name">Fajr</div><div class="prayer-time">${times.Fajr}</div></div>
+      <div class="prayer-item"><div class="prayer-name">Sunrise</div><div class="prayer-time">${times.Sunrise}</div></div>
+      <div class="prayer-item"><div class="prayer-name">Dhuhr</div><div class="prayer-time">${times.Dhuhr}</div></div>
+      <div class="prayer-item"><div class="prayer-name">Asr</div><div class="prayer-time">${times.Asr}</div></div>
+      <div class="prayer-item"><div class="prayer-name">Maghrib</div><div class="prayer-time">${times.Maghrib}</div></div>
+      <div class="prayer-item"><div class="prayer-name">Isha</div><div class="prayer-time">${times.Isha}</div></div>
+    </div>
+    <p style="font-size:0.72rem;color:var(--muted);margin-top:0.7rem;text-align:center;">📍 ${city.name} • Calculated using astronomical formula</p>
+  </div>`;
+}
+
+function getLocation() { showToast('Use city chips above to find prayer times.'); }
+
+// ══════════════════════════════
+// INIT APP
+// ══════════════════════════════
+function initApp() {
+  buildDayPicker();
+  loadHadith(1);
+  buildDuaCats();
+  loadDuas('Ramadan');
+  updateCountdown();
+  buildTimetable();
+  updateHomeRozaCard();
+  setInterval(updateCountdown, 60000);
+  setLang(currentLang);
+}
+
+// ══════════════════════════════
+// NAV & UTILITIES
+// ══════════════════════════════
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(()=>showToast(UI[currentLang].copied)).catch(()=>{});
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type==='error'?' error-toast':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function togglePass(inputId, eyeId) {
+  const input = document.getElementById(inputId);
+  const eye = document.getElementById(eyeId);
+  if (input.type==='password') { input.type='text'; eye.textContent='🙈'; }
+  else { input.type='password'; eye.textContent='👁️'; }
+}
+
+// ══════════════════════════════
+// EXPOSE TO WINDOW
+// ══════════════════════════════
+window.setLang         = setLang;
+window.switchAuthTab   = switchAuthTab;
+window.doLogin         = doLogin;
+window.doSignup        = doSignup;
+window.doForgotPassword= doForgotPassword;
+window.continueAsGuest = continueAsGuest;
+window.doLogout        = doLogout;
+window.saveName        = saveName;
+window.showSection     = showSection;
+window.copyText        = copyText;
+window.togglePass      = togglePass;
+window.changeTasbeeh   = changeTasbeeh;
+window.incrementTasbeeh= incrementTasbeeh;
+window.undoTasbeeh     = undoTasbeeh;
+window.resetTasbeeh    = resetTasbeeh;
+window.setTarget       = setTarget;
+window.quickCity       = quickCity;
+window.fetchPrayer     = fetchPrayer;
+window.getLocation     = getLocation;
+
+// Enter key support
+document.getElementById('loginPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('loginEmail').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('signupPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') doSignup(); });
+
+// Apply language on login screen load
+setLang(currentLang);
+
+</script>
+</body>
+</html>
